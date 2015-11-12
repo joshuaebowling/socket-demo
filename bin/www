@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('ss-steams:server');
 var http = require('http');
+var config = require('config.json')('./ss-config.json');
 var io = require('socket.io')(http);
 var ss = require('socket.io-stream');
 var path = require('path');
@@ -14,8 +15,8 @@ var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
 var decoder = new StringDecoder('utf8');
 // Temp home for socket logic
-io.listen(8003);
-
+io.listen(config.socket.port);
+console.log(config);
 io.of('/upload').on('connection', function(socket) {
   console.log('connected');
   ss(socket).on('import-data', function(stream, data) {
@@ -31,7 +32,7 @@ io.of('/upload').on('connection', function(socket) {
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '8002');
+var port = normalizePort(process.env.PORT || config.web.port.toString());
 app.set('port', port);
 
 /**
