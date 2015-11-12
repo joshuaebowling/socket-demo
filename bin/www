@@ -18,10 +18,11 @@ io.of('/upload').on('connection', function(socket) {
   console.log('connected');
   ss(socket).on('import-data', function(stream, data) {
     var fileName;
-    console.log(stream);
-    console.log(data);
     fileName = path.basename(data.name);
-    console.log(fileName);
+    console.log(stream.on);
+    stream.on('data', function(buffer) {
+      console.log(buffer.length);
+    })
     stream.pipe(fs.createWriteStream(fileName));
   });
 });
