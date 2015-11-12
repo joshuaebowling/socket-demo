@@ -11,6 +11,8 @@ var io = require('socket.io')(http);
 var ss = require('socket.io-stream');
 var path = require('path');
 var fs = require('fs');
+var StringDecoder = require('string_decoder').StringDecoder;
+var decoder = new StringDecoder('utf8');
 // Temp home for socket logic
 io.listen(8003);
 
@@ -19,9 +21,8 @@ io.of('/upload').on('connection', function(socket) {
   ss(socket).on('import-data', function(stream, data) {
     var fileName;
     fileName = path.basename(data.name);
-    console.log(stream.on);
     stream.on('data', function(buffer) {
-      console.log(buffer.length);
+      console.log(decoder.write(buffer));
     })
     stream.pipe(fs.createWriteStream(fileName));
   });
