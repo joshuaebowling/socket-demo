@@ -16,14 +16,14 @@ var StringDecoder = require('string_decoder').StringDecoder;
 var decoder = new StringDecoder('utf8');
 // Temp home for socket logic
 io.listen(config.socket.port);
-console.log(config);
 io.of('/upload').on('connection', function(socket) {
   console.log('connected');
   ss(socket).on('import-data', function(stream, data) {
     var fileName;
     fileName = path.basename(data.name);
     stream.on('data', function(buffer) {
-      console.log(decoder.write(buffer));
+//      console.log(decoder.write(buffer));
+      socket.emit('column-data', {data: decoder.write(buffer)})
     })
     stream.pipe(fs.createWriteStream(fileName));
   });
